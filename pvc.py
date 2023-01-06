@@ -3,8 +3,11 @@
 from flagser import *
 import os
 import sys
+import subprocess
 
 name = "package"
+downloadPath = "/.local/tmp"
+
 
 def clone(args):
     if not os.path.exists(getFile("")):
@@ -13,7 +16,9 @@ def clone(args):
     os.system("git clone ssh://aur@aur.archlinux.org/"+args[0]+".git")
 
 def getFile(name):
-    path = "/home/spy/.local/tmp/"+name
+    # get home path
+    result = subprocess.check_output("echo $HOME", shell=True).decode("utf-8").replace("\n", "")
+    path = result+downloadPath+"/"+name
     if not os.path.exists(path):
         print(name+" package does not exist")
         exit()
@@ -80,7 +85,8 @@ c = FlagManager([src, version, getversion, packages, pull, push, r])
 c.description = "PackageVersionController (pvc) helps you update the version to your aur package \nit downloads the ssh repo and updates the version \nand creates a srcinfo file and uploads it"
 
 fname = sys.argv[len(sys.argv)-1]
-if os.path.exists("/home/spy/.local/tmp/"+fname) and fname not in c.flags:
+result = subprocess.check_output("echo $HOME", shell=True).decode("utf-8").replace("\n", "")
+if os.path.exists(result+downloadPath+"/"+fname) and fname not in c.flags:
     name = fname
 
 c.check()
