@@ -82,7 +82,7 @@ packages = Flag("-n","--names", description="outputs cloned package names ",onCa
 r = Flag("-rm", description="removes followed by name (-rm all removes all)", onCall=lambda args:clearPackages(args))
 
 c = FlagManager([src, version, getversion, packages, pull, push, r])
-c.description = "PackageVersionController (pvc) helps you update the version to your aur package \nit downloads the ssh repo and updates the version \nand creates a srcinfo file and uploads it"
+c.description = "PackageVersionController (pvc) helps you update the version to your aur package \nit downloads the ssh repo and updates the version \nand creates a srcinfo file and uploads it\n\nUSE\npvc [command] [package name]\nEXAMPLE\npvc clone linecounter-git -v 2.0.1 push linecounter-git -rm linecounter-git\nThis will clone linecounter-git change version and upload it and then delete the clone\n"
 
 fname = sys.argv[len(sys.argv)-1]
 result = subprocess.check_output("echo $HOME", shell=True).decode("utf-8").replace("\n", "")
