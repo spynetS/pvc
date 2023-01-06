@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from flagser import *
 import os
 import sys
@@ -65,7 +67,6 @@ def clearPackages(names):
     elif len(names) > 0 and names[0] == "all":
         for name in os.listdir(getFile("")):
             os.system("rm -rf "+getFile(name))
-
 
 
 # flags
