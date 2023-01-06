@@ -10,8 +10,7 @@ def clone(args):
     if not os.path.exists(getFile("")):
         os.mkdir(getFile(""))
     os.chdir(getFile(""))
-    os.system("git clone "+args[0])
-    print(args)
+    os.system("git clone ssh://aur@aur.archlinux.org/"+args[0]+".git")
 
 def getFile(name):
     path = "/home/spy/.local/tmp/"+name
@@ -60,17 +59,16 @@ def update():
     os.system("git pull")
 
 def clearPackages(names):
-    if len(names) > 1:
-        for name in names:
-            os.system("rm -rf "+getFile(name))
+    for name in names:
+        os.system("rm -rf "+getFile(name))
 
-    elif len(names) > 0 and names[0] == "all":
+    if len(names) > 0 and names[0] == "all":
         for name in os.listdir(getFile("")):
             os.system("rm -rf "+getFile(name))
 
 
 # flags
-src = Flag("clone","--clone", description="the ssh git clone",onCall=lambda args:clone(args))
+src = Flag("clone","--clone", description="clones the package (only packagename ssh://aur@aur.archlinux.org/ already defined)",onCall=lambda args:clone(args))
 version = Flag("-v","--set-version" , description="the version to set ",onCall=lambda args:setVersion(args))
 getversion = Flag("-gv","--get-version", description="outputs current version ",onCall=lambda args:getVersion(args))
 push = Flag("push", "--push", description="push git repo ",onCall=lambda args:upload(args))
