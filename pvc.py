@@ -47,13 +47,12 @@ def upload(args):
     os.system("git commit -m 'new version'")
     os.system("git push")
 
-def getVersion(args):
+def getVersion():
     file = open(getFile(name)+"/PKGBUILD","r")
     lines = []
     for l in file.readlines():
         if "pkgver=" in l:
-            print(l,end="")
-            break
+            return l.split("=")[1]
 def listdir():
 
     for f in os.listdir(getFile("")):
@@ -70,18 +69,37 @@ def clearPackages(names):
     if len(names) > 0 and names[0] == "all":
         for name in os.listdir(getFile("")):
             os.system("rm -rf "+getFile(name))
+# the questiion is should 2.0.9 become 2.0.10 or 2.1.0 ?
+def increment():
+    version = getVersion()
+    newVersion = ""
+    numbers = []
+    for num in version.split("."):
+        numbers.append(int(num))
+    last = numbers[-1]
+    if last != 9:
+        numbers[-1] = last+1
+    else:
+        numbers[len(numbers)-2] = numbers[len(numbers)-2]+1
+        numbers[-1] = 0
+    for num in numbers:
+        newVersion+=str(num)+"."
+
+    newVersion = newVersion[:-1]
+    setVersion([newVersion])
 
 
 # flags
 src = Flag("clone","--clone", description="clones the package (only packagename ssh://aur@aur.archlinux.org/ already defined)",onCall=lambda args:clone(args))
 version = Flag("-v","--set-version" , description="the version to set ",onCall=lambda args:setVersion(args))
-getversion = Flag("-gv","--get-version", description="outputs current version ",onCall=lambda args:getVersion(args))
+getversion = Flag("-gv","--get-version", description="outputs current version ",onCall=lambda args:print("pkgver="+getVersion(),end=""))
 push = Flag("push", "--push", description="push git repo ",onCall=lambda args:upload(args))
 pull = Flag("pull", "--pull", description="pull ",onCall=lambda args:update())
 packages = Flag("-n","--names", description="outputs cloned package names ",onCall=lambda args:listdir())
 r = Flag("-rm", description="removes followed by name (-rm all removes all)", onCall=lambda args:clearPackages(args))
+i = Flag("-i", description="increments version (2.0.1 -> 2.0.2)", onCall=lambda args:increment())
 
-c = FlagManager([src, version, getversion, packages, pull, push, r])
+c = FlagManager([src, version, getversion, packages, pull, push, r,i])
 c.description = "PackageVersionController (pvc) helps you update the version to your aur package \nit downloads the ssh repo and updates the version \nand creates a srcinfo file and uploads it\n\nUSE\npvc [command] [package name]\nEXAMPLE\npvc clone linecounter-git -v 2.0.1 push linecounter-git -rm linecounter-git\nThis will clone linecounter-git change version and upload it and then delete the clone\n"
 
 fname = sys.argv[len(sys.argv)-1]
