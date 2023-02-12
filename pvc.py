@@ -137,15 +137,15 @@ package() {
     f.write(file)
 
 c = FlagManager([
-    Flag("clone","--clone      ", description="clones the package (only packagename ssh://aur@aur.archlinux.org/ already defined)",onCall=lambda args:clone(args)),
-    Flag("-v   ","--set-version" , description="the version to set ",onCall=lambda args:setVersion(args)),
-    Flag("-gv  ","--get-version", description="outputs current version ",onCall=lambda args:print("pkgver="+getVersion(),end="")),
-    Flag("push ", "--push       ", description="push git repo ",onCall=lambda args:upload(args)),
-    Flag("pull ", "--pull       ", description="pull ",onCall=lambda args:update()),
-    Flag("-n   ","--names      ", description="outputs cloned package names ",onCall=lambda args:listdir()),
-    Flag("-rm  ", description="removes followed by name (-rm all removes all)", onCall=lambda args:clearPackages(args)),
-    Flag("-i   ", description="increments version (2.0.1 -> 2.0.2)", onCall=lambda args:increment()),
-    Flag("init ", description="generates file (followed by prodname)", onCall=generate),
+    Flag("clone","--clone", description="clones the package (only packagename ssh://aur@aur.archlinux.org/ already defined)",onCall=lambda args:clone(args)),
+    Flag("-v","--set-version" , description="the version to set ",onCall=lambda args:setVersion(args)),
+    Flag("-gv","--get-version", description="outputs current version ",onCall=lambda args:print("pkgver="+getVersion(),end="")),
+    Flag("push", "--push", description="push git repo ",onCall=lambda args:upload(args)),
+    Flag("pull", "--pull", description="pull ",onCall=lambda args:update()),
+    Flag("-n","--names", description="outputs cloned package names ",onCall=lambda args:listdir()),
+    Flag("-rm", description="removes followed by name (-rm all removes all)", onCall=lambda args:clearPackages(args)),
+    Flag("-i", description="increments version (2.0.1 -> 2.0.2)", onCall=lambda args:increment()),
+    Flag("init", description="generates file (followed by prodname)", onCall=generate),
 ])
 c.description = "PackageVersionController (pvc) helps you update the version to your aur package \nit downloads the ssh repo and updates the version \nand creates a srcinfo file and uploads it\n\nUSE\npvc [command] [package name]\nEXAMPLE\npvc clone linecounter-git -v 2.0.1 push linecounter-git -rm linecounter-git\nThis will clone linecounter-git change version and upload it and then delete the clone\n"
 
