@@ -20,8 +20,9 @@ def getFile(name):
     result = subprocess.check_output("echo $HOME", shell=True).decode("utf-8").replace("\n", "")
     path = result+downloadPath+"/"+name
     if not os.path.exists(path):
-        print(name+" package does not exist")
-        exit()
+        print("path did not exist, creates ~/.local/tmp folder")
+        os.mkdir(result+downloadPath)
+        return(getFile(name))
     return path
 
 def setVersion(args):
