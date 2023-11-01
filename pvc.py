@@ -8,6 +8,15 @@ import subprocess
 name = "package"
 downloadPath = "/.local/tmp"
 
+def edit(args):
+    global name
+    try:
+        editor = os.environ['EDITOR']
+        os.system(f"{editor} {getFile(name)}")
+    except:
+        print("no $EDITOR was found!")
+        print("write Ex: export EDITOR=/usr/bin/vim")
+
 
 def clone(args):
     if not os.path.exists(getFile("")):
@@ -147,6 +156,7 @@ c = FlagManager([
     Flag("-rm", description="removes followed by name (-rm all removes all)", onCall=lambda args:clearPackages(args)),
     Flag("-i", description="increments version (2.0.1 -> 2.0.2)", onCall=lambda args:increment()),
     Flag("init", description="generates file (followed by prodname)", onCall=generate),
+    Flag("edit", description="opens the project in your $EDITOR", onCall=edit),
 ])
 c.description = "PackageVersionController (pvc) helps you update the version to your aur package \nit downloads the ssh repo and updates the version \nand creates a srcinfo file and uploads it\n\nUSE\npvc [command] [package name]\nEXAMPLE\npvc clone linecounter-git -v 2.0.1 push linecounter-git -rm linecounter-git\nThis will clone linecounter-git change version and upload it and then delete the clone\n"
 
