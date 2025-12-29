@@ -10,12 +10,13 @@ downloadPath = "/.local/tmp"
 
 def edit(args):
     global name
-    try:
-        editor = os.environ['EDITOR']
-        os.system(f"{editor} {getFile(name)}")
-    except:
-        print("no $EDITOR was found!")
-        print("write Ex: export EDITOR=/usr/bin/vim")
+
+    editor = os.environ.get('EDITOR')
+    if not editor:
+        print("No $EDITOR was found!")
+        print("Example: export EDITOR=/usr/bin/vim")
+        return
+    os.system(f"{editor} {getFile(name)}")
 
 
 def clone(args):
